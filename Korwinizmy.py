@@ -11,11 +11,9 @@ logger = logging.getLogger()
 
 
 def main():
-    #Tworzymy api
+    #Api creation
     api = config.create_api()
     result = []
-    #Lista, która ma przechowywać id tweetów, do których już odpowiedzieliśmy
-    #Tę pętlę chyba dałoby radę zastąpić streamem, ale nie chce mi się teraz tego rozkminiać. uwu
     while True:
         try:
             for i in range(0, len(cytaty)):
