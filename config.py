@@ -5,11 +5,11 @@ import logging
 logger = logging.getLogger()
 
 def create_api():
-    #Jebaj się sam z ustawianiem tego jako zmienne środowiskowe w windowsie. Aj der ju.
-    consumer_key = "ZMOlk9qCm2sSCpZcWVRAIVkbT"
-    consumer_secret = "DscKgmlRE7RjtLMfqRR83yXvPbgRaELn306rXBSZ7zA93AbThr"
-    access_token = "1318235514273746945-BzsD4vvlsxMGdAvKquyWmPSuJ5g9BR"
-    access_token_secret = "jkd57SxHAfp5sqa57KCK91Tbbun7YtQTzkhOEfJfbeHcv"
+    #Access data are set here instead of as an environmental variables due to it being simpler for mobilitys sake
+    consumer_key = ""
+    consumer_secret = ""
+    access_token = ""
+    access_token_secret = ""
 
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
@@ -19,8 +19,8 @@ def create_api():
     try:
         api.verify_credentials()
     except Exception as e:
-        logging.error("Błąd podczas tworzenia API", exc_info=True)
+        logging.error("Error during API creation", exc_info=True)
         raise e
 
-    logger.info("API stworzone")
+    logger.info("API created")
     return api
