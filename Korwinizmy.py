@@ -21,17 +21,17 @@ def main():
             for i in range(0, len(cytaty)):
                 result.append(cytaty[i][random.randint(0, len(cytaty[i])-1)])
         except:
-            logger.info("Błąd podczas generowania korwinizmu")
+            logger.info("Korwin quote could not be generated")
             result.clear()
             continue
-        logger.info("Wygenerowano korwinizm")
-        if len("Myśl według Korwina na teraz: " + '"' + " ".join(result) + '"') <=280:
-            api.update_status("Myśl według Korwina na teraz: " + '"' + " ".join(result) + '"')
-            logger.info("Korwinizm został umieszczony na twitterze")
+        logger.info("Korwin quote generated")
+        if len("Korwin quote for now: " + '"' + " ".join(result) + '"') <=280:
+            api.update_status("Korwin quote for now: " + '"' + " ".join(result) + '"')
+            logger.info("Korwin quote has been sent to twitter")
             result.clear()
             sleep(60)
         else:
-            logging.info("Przekroczono limit znaków.")
+            logging.info("Character limit exceeded.")
             result.clear()
             continue
 
