@@ -2,7 +2,7 @@ import tweepy
 import logging
 import random
 import json
-from time import sleep
+import time
 from quotes import cytaty
 
 logger = logging.getLogger()
@@ -57,7 +57,7 @@ def korwinizmy():
             api.update_status("Myśl według Korwina na teraz: " + '"' + " ".join(result) + hasztagi)
             logger.info("Korwinizm został umieszczony na twitterze")
             result.clear()
-            sleep(60)
+            time.sleep(60)
         else:
             logger.error("Character limit exceeded")
             result.clear()
@@ -78,11 +78,11 @@ def dmy(api, flaga=False):
                     api.send_direct_message(message.message_create['sender_id'], answerText)
                 except:
                     logger.error("Error during answering to a message", exc_info=True)
-                    sleep(random.randint(1,5))
+                    time.sleep(random.randint(1,5))
                     pass
         if flaga:
             break
-        sleep(5)
+        time.sleep(5)
 
 #As to not use while loop monitoring dms has been rewritten to use Cursor object.
 #And it works. Although, I seem to be unable to access dm's text this way. Why should I tho, I don't know.
@@ -98,16 +98,15 @@ def dmyKursorem(api):
         logger.info("IDs loaded sucesfully")
     except ValueError:
         messagesDictionary = {}
-
         logger.error("Unable to load from msgID.json. Created empty dictionary", exc_info=True)
     #Json that temp. stores id and timestamp of each dm that has been responded too.
     #It's gonna be later dumped into a file.
-    for dm in tweepy.Cursor(api.list_direct_messages).items():
+    for dm in tweepy.Cursor(api.list_direct_messages, wait_on_rate_limit=True, wait_on_rate_limit_notify=True).items():
         for storedMessage in messagesDictionary.items():
-            if dm.id == storedMessage['id']:
+            if dm.id == storedMessage[1]['id']:
                 has_been_answered = True
                 break
-        if not has_been_answered:
+        if not has_been_answered and int(dm.message_create['sender_id']) != 1318235514273746945:
             api.send_direct_message(dm.message_create['sender_id'], dm_answer)
-            messagesDictionary["".join(['message', time.time()])] = {'id':dm.id, 'timestamp':dm.timestamp}
-            open("msgID.json", 'w').write(messagesDictionary)
+            messagesDictionary["".join(['message', str(time.time())])] = {"id":dm.id, "timestamp":dm.created_timestamp}
+            open("msgID.json", 'w').write(str(messagesDictionary))
